@@ -2,35 +2,13 @@
 
 Drrik (দৃক) is a Sanskrit (সংস্কৃত) word which stands for knowledge, eye, and direction. Drrik is a framework for extracting interpretable features from the MLP layers of transformer-based Large Language Models using Sparse Autoencoders, inspired by the [Towards Monosemanticity](https://transformer-circuits.pub/2023/monosemantic-features/index.html) paper from Anthropic.
 
-## Overview
-
-This framework implements a pipeline for:
-
-1. **Loading models** from HuggingFace Hub
-2. **Running inference** on datasets from HuggingFace Hub
-3. **Collecting MLP activations** using the [`nnsight`](https://github.com/ndif-team/nnsight) library
-4. **Training Sparse Autoencoders** to extract interpretable features
-5. **Visualizing features** with matplotlib and seaborn
-6. **Tracking experiments** with Weights & Biases (optional)
-
 ## Installation
-
-### Requirements
-
-- Python 3.12+
-- CUDA-capable GPU (recommended, 8GB VRAM sufficient for <3B models)
-- 8GB+ RAM
 
 ### Setup with UV (recommended)
 
 ```bash
-# Install uv if you don't have it
-pip install uv
-
-# Clone and install
-git clone <repo-url>
-cd drrik
 uv sync
+source .venv/bin/activate
 ```
 
 ### Setup with pip
@@ -38,7 +16,7 @@ uv sync
 ```bash
 # Create virtual environment
 python -m venv .venv
-source .venv/bin/activate  # On Windows: .venv\Scripts\activate
+source .venv/bin/activate
 
 # Install dependencies
 pip install -e .
@@ -124,33 +102,6 @@ python examples/load_saved_activations.py
 
 # Using wandb integration
 python examples/with_wandb.py
-```
-
-## Project Structure
-
-```
-drrik/
-├── drrik/
-│   ├── __init__.py           # Package initialization
-│   ├── config.py             # Pydantic configuration classes
-│   ├── models.py             # Activation extraction using nnsight
-│   ├── autoencoder.py        # Sparse Autoencoder implementation
-│   ├── visualization.py      # Feature visualization tools
-│   ├── settings.py           # Environment settings and wandb config
-│   └── cli.py                # Command-line interface
-├── examples/
-│   ├── basic_usage.py        # Basic pipeline example
-│   ├── advanced_pipeline.py  # Advanced configuration examples
-│   ├── load_saved_activations.py
-│   └── with_wandb.py         # wandb integration example
-├── tests/
-│   ├── conftest.py           # Pytest configuration
-│   ├── test_imports.py       # Core functionality tests
-│   └── test_settings.py      # Settings and wandb tests
-├── .env.example              # Environment variables template
-├── config.yml                # Example YAML configuration
-├── pyproject.toml           # Project dependencies
-└── README.md
 ```
 
 ## Configuration
@@ -387,12 +338,6 @@ Run the test suite:
 # Run all tests
 pytest
 
-# Run specific test file
-pytest tests/test_imports.py
-
-# Run with verbose output
-pytest -v
-
 # Skip slow tests
 pytest -m "not slow"
 ```
@@ -405,7 +350,7 @@ pytest -m "not slow"
 
 ## License
 
-MIT License - See LICENSE file for details
+AGPL-3.0
 
 ## Contributing
 
