@@ -52,7 +52,7 @@ from drrik import ActivationExtractor, SparseAutoencoder, FeatureVisualizer
 
 # 1. Extract MLP activations
 extractor = ActivationExtractor(
-    model_name="google/gemma-2b",  # 2B parameters, fits on 8GB VRAM
+    model_name="meta-llama/Llama-3.1-8B-Instruct",  # 8B parameters, gated model (requires HF token)
     dataset_name="wikitext",
     mlp_layers=[0],
     num_samples=1000,
@@ -170,7 +170,7 @@ The CLI uses YAML configuration files for easy setup:
 
 ```yaml
 # Model configuration
-model_name: "google/gemma-2b"
+model_name: "meta-llama/Llama-3.1-8B-Instruct"
 torch_dtype: "float16"
 device_map: "cpu"
 
@@ -186,8 +186,8 @@ extraction_batch_size: 8
 mlp_layers: [0]
 
 # Sparse Autoencoder configuration
-activation_dim: 2048
-hidden_dim: 16384  # 8x expansion
+activation_dim: 4096
+hidden_dim: 32768  # 8x expansion
 l1_coefficient: 0.01
 learning_rate: 0.0001
 num_epochs: 50
@@ -223,7 +223,7 @@ from drrik.config import ActivationExtractorConfig, ModelConfig, DatasetConfig
 
 config = ActivationExtractorConfig(
     model=ModelConfig(
-        model_name="google/gemma-2b",
+        model_name="meta-llama/Llama-3.1-8B-Instruct",
         torch_dtype="float16",
     ),
     dataset=DatasetConfig(
@@ -242,8 +242,8 @@ config = ActivationExtractorConfig(
 from drrik.config import SparseAutoencoderConfig
 
 sae_config = SparseAutoencoderConfig(
-    activation_dim=2048,
-    hidden_dim=4096,  # 2x expansion
+    activation_dim=4096,
+    hidden_dim=8192,  # 2x expansion
     l1_coefficient=0.01,
     learning_rate=1e-4,
     resample_dead_neurons=True,
@@ -274,7 +274,7 @@ Environment variables (`HUGGINGFACE_HUB_TOKEN`, `WANDB_API_KEY`, `WANDB_PROJECT`
 Any HuggingFace transformer model with MLP layers. 
 
 > [!IMPORTANT]
->  **For Apple Silicon users**: Models like gemma-2b have internal weight matrices that exceed MPS kernel limits. Use `device_map: "cpu"` for activation extraction and `training_device: "mps"` for SAE training or, use a smaller batch size and hidden dimension (meaning a smaller expansion factor).
+>  **For Apple Silicon users**: Models like Llama-3.1-8B-Instruct have internal weight matrices that exceed MPS kernel limits. Use `device_map: "cpu"` for activation extraction and `training_device: "mps"` for SAE training or, use a smaller batch size and hidden dimension (meaning a smaller expansion factor).
 
 ### Supported Datasets
 
@@ -311,7 +311,7 @@ settings = get_settings()
 wandb_config = WandbConfig(
     project="drrik-experiments",
     name="my-experiment",
-    config={"model": "gemma-2b", "expansion": 8},
+    config={"model": "llama-3.1-8b-instruct", "expansion": 8},
     enabled=settings.use_wandb,  # Auto-disables if no API key
 )
 
@@ -361,7 +361,7 @@ open docs/drrik.html
 
 ```python
 extractor = ActivationExtractor(
-    model_name="google/gemma-2b",
+    model_name="meta-llama/Llama-3.1-8B-Instruct",
     dataset_name="wikitext",
     num_samples=1000,
     mlp_layers=[0],
